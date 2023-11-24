@@ -1,8 +1,10 @@
 const fs = require("fs");
 const qs = require("qs");
 const axios = require("axios");
-const parser = require("xml2json");
+const { XMLParser } = require("fast-xml-parser");
 const CONFIG = require("../config.json");
+
+const parser = new XMLParser();
 
 exports.yfbb = {
   // Global credentials variable
@@ -142,7 +144,7 @@ exports.yfbb = {
           "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36",
         },
       });
-      const jsonData = JSON.parse(parser.toJson(response.data));
+      const jsonData = JSON.parse(parser.parse(response.data));
       return jsonData;
     } catch (err) {
       if (err.response.data && err.response.data.error && err.response.data.error.description && err.response.data.error.description.includes("token_expired")) {
